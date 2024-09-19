@@ -1,8 +1,8 @@
-import Home from './Home';
+import NavBar from './NavBar';
 
 export default function App() {
   return (
-    <Home/>
+    <NavBar/>
   );
 }
 
