@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MapView from 'react-native-maps';
-import { Platform, StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View, Text } from 'react-native';
 import * as Location from 'expo-location';
 
 export default function Home() {
@@ -9,7 +9,7 @@ export default function Home() {
   const [region, setRegion] = useState(null)
   useEffect(() => {
     (async () => {
-      let {status} = await Location.requestForegroundPermissionsAsync();
+      let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setOut(status)
         setErrorMsg('Permission to access location was denied');
@@ -34,13 +34,13 @@ export default function Home() {
   if (errorMsg) {
     text = <Text>{errorMsg}</Text>;
   } else if (location) {
-    
-    text = <MapView style={styles.map} 
-    initialRegion={region}
-    Region={region}
-    onRegionChange={onRegionChange}
+
+    text = <MapView style={styles.map}
+      initialRegion={region}
+      Region={region}
+      onRegionChange={onRegionChange}
     />;
-  } 
+  }
 
 
   return (
