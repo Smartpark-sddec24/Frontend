@@ -6,23 +6,24 @@ import * as Location from 'expo-location';
 export default function Home() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);
-  const [region, setRegion] = useState(null)
+  const [region, setRegion] = useState({
+    latitude: 0,
+    longitude: 0,
+    latitudeDelta: 0,
+    longitudeDelta: 0,
+  })
+
   useEffect(() => {
     (async () => {
       let { status } = await Location.requestForegroundPermissionsAsync();
       if (status !== 'granted') {
         setOut(status)
         setErrorMsg('Permission to access location was denied');
-        //return;
+        return;
       }
       let location = await Location.getCurrentPositionAsync();
       setLocation(location);
-      setRegion({
-        latitude: location["coords"]["latitude"],
-        longitude: location["coords"]["longitude"],
-        latitudeDelta: 1.0,
-        longitudeDelta: 1.0,
-      })
+
     })();
   }, []);
 
@@ -34,19 +35,30 @@ export default function Home() {
   if (errorMsg) {
     text = <Text>{errorMsg}</Text>;
   } else if (location) {
+    text = <View>
+      <MapView style={styles.map}
+        initialRegion={{
+          latitude: location.coords.latitude,
+          longitude: location.coords.longitude,
+          latitudeDelta: .005,
+          longitudeDelta: .109,
+        }}
+        Region={region}
+        onRegionChange={onRegionChange}
 
-    text = <MapView style={styles.map}
-      initialRegion={region}
-      Region={region}
-      onRegionChange={onRegionChange}
-    />;
+      />
+      <Text>latitude: {region.latitude}</Text>
+      <Text>longitude: {region.longitude}</Text>   
+      <Text>latitudeDelta: {region.latitudeDelta}</Text>
+      <Text>longitudeDelta: {region.longitudeDelta}</Text>
+    </View>
+
   }
 
 
   return (
     <View style={styles.container}>
       {text}
-      <Text>{region['longitude']}</Text>
     </View>
   );
 }
@@ -56,7 +68,7 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   map: {
-    width: '50%',
-    height: '50%',
+    width: '100%',
+    height: '75%',
   },
 });
