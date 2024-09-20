@@ -1,19 +1,15 @@
 import React from 'react';
 import { View, StyleSheet } from 'react-native';
-
 import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { Text, BottomNavigation } from 'react-native-paper';
 import FA5 from 'react-native-vector-icons/FontAwesome5';
 import FA6 from 'react-native-vector-icons/FontAwesome6';
 import Home from './Pages/Home';
-//import Icon from 'react-native-vector-icons/MaterialCommunityIcons';
 
-
-
-const Tab = createBottomTabNavigator();
 
 export default function App() {
+  const Tab = createBottomTabNavigator();
   return (
     <Tab.Navigator
       screenOptions={{
@@ -22,7 +18,7 @@ export default function App() {
       tabBar={({ navigation, state, descriptors, insets }) => (
         <BottomNavigation.Bar
           navigationState={state}
-         safeAreaInsets={insets}
+          safeAreaInsets={insets}
           onTabPress={({ route, preventDefault }) => {
             const event = navigation.emit({
               type: 'tabPress',
@@ -33,7 +29,7 @@ export default function App() {
             if (event.defaultPrevented) {
               preventDefault();
             } else {
-             navigation.dispatch({
+              navigation.dispatch({
                 ...CommonActions.navigate(route.name, route.params),
                 target: state.key,
               });
@@ -53,16 +49,16 @@ export default function App() {
               options.tabBarLabel !== undefined
                 ? options.tabBarLabel
                 : options.title !== undefined
-                ? options.title
-                : route.title;
+                  ? options.title
+                  : route.title;
 
             return label;
           }}
         />
       )}
     >
-      
-      { <Tab.Screen
+
+      {<Tab.Screen
         name="Park"
         component={SettingsScreen}
         options={{
@@ -71,7 +67,7 @@ export default function App() {
             return <FA5 name="map-marker-alt" size={size} color={color} />;
           },
         }}
-      />  }
+      />}
 
       <Tab.Screen
         name="Home"
@@ -84,8 +80,7 @@ export default function App() {
         }}
       />
 
-
-     { <Tab.Screen
+      {<Tab.Screen
         name="Reserve"
         component={SettingsScreen}
         options={{
@@ -94,8 +89,7 @@ export default function App() {
             return <FA5 name="ticket-alt" size={size} color={color} />;
           },
         }}
-      />  }
-
+      />}
 
     </Tab.Navigator>
   );
