@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import MapView from 'react-native-maps';
 import { StyleSheet, View, Text } from 'react-native';
 import * as Location from 'expo-location';
+import { ActivityIndicator } from 'react-native-paper';
 
 export default function Home() {
   const [location, setLocation] = useState(null);
@@ -31,12 +32,11 @@ export default function Home() {
     setRegion(newRegion);
   }
 
-  let text = <Text>"Waiting"</Text>;
+  let map = null;
   if (errorMsg) {
-    text = <Text>{errorMsg}</Text>;
+    
   } else if (location) {
-
-    text = <View>
+    map = <View>
       <MapView style={styles.map}
         initialRegion={{
           latitude: location.coords.latitude,
@@ -48,28 +48,32 @@ export default function Home() {
         onRegionChange={onRegionChange}
         showsUserLocation={true}
       />
-      <Text>latitude: {region.latitude}</Text>
-      <Text>longitude: {region.longitude}</Text>   
-      <Text>latitudeDelta: {region.latitudeDelta}</Text>
-      <Text>longitudeDelta: {region.longitudeDelta}</Text>
     </View>
-
   }
 
-
-  return (
+  if(location){
+    return (
+      <View style={styles.container}>
+        {map}
+      </View>
+    )
+  } else {
+  return(
     <View style={styles.container}>
-      {text}
+        <ActivityIndicator animating={true} size={100}/>
     </View>
-  );
+    )
+  }
 }
 
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    justifyContent: 'center'
   },
+
   map: {
     width: '100%',
-    height: '75%',
+    height: '100%',
   },
 });
