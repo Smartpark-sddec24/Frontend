@@ -32,36 +32,31 @@ export default function Home() {
     setRegion(newRegion);
   }
 
-  let map = null;
   if (errorMsg) {
-    
-  } else if (location) {
-    map = <View>
-      <MapView style={styles.map}
-        initialRegion={{
-          latitude: location.coords.latitude,
-          longitude: location.coords.longitude,
-          latitudeDelta: .005,
-          longitudeDelta: .109,
-        }}
-        Region={region}
-        onRegionChange={onRegionChange}
-        showsUserLocation={true}
-      />
-    </View>
+    console.log(errorMsg)
   }
 
-  if(location){
+  if (location) {
     return (
       <View style={styles.container}>
-        {map}
+        <MapView style={styles.map}
+          initialRegion={{
+            latitude: location.coords.latitude,
+            longitude: location.coords.longitude,
+            latitudeDelta: .005,
+            longitudeDelta: .109,
+          }}
+          Region={region}
+          onRegionChange={onRegionChange}
+          showsUserLocation={true}
+        />
       </View>
     )
   } else {
-  return(
-    <View style={styles.container}>
-        <ActivityIndicator animating={true} size={100}/>
-    </View>
+    return (
+      <View style={styles.container}>
+        <ActivityIndicator animating={true} size={100} />
+      </View>
     )
   }
 }
