@@ -35,6 +35,7 @@ export default function Home() {
   if (errorMsg) {
     text = <Text>{errorMsg}</Text>;
   } else if (location) {
+
     text = <View>
       <MapView style={styles.map}
         initialRegion={{
@@ -45,7 +46,7 @@ export default function Home() {
         }}
         Region={region}
         onRegionChange={onRegionChange}
-
+        showsUserLocation={true}
       />
       <Text>latitude: {region.latitude}</Text>
       <Text>longitude: {region.longitude}</Text>   
