@@ -19,7 +19,6 @@ export default function App() {
       }}
       tabBar={({ navigation, state, descriptors, insets }) => (
         <BottomNavigation.Bar
-          ini
           navigationState={state}
           safeAreaInsets={insets}
           onTabPress={({ route, preventDefault }) => {
@@ -27,12 +26,7 @@ export default function App() {
               type: 'tabPress',
               target: route.key,
               canPreventDefault: true,
-            },
-              console.log(navigation),
-              console.log(state),
-              console.log(descriptors),
-              console.log(insets)
-            );
+            });
 
             if (event.defaultPrevented) {
               preventDefault();
