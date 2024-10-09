@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, StyleSheet } from 'react-native';
 import { CommonActions } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -10,8 +10,10 @@ import SearchBar from './Components/SearchBar';
 
 export default function App() {
   const Tab = createBottomTabNavigator();
+
   return (
     <Tab.Navigator
+      initialRouteName={"Home"}
       screenOptions={{
         headerShown: false,
       }}
@@ -71,7 +73,8 @@ export default function App() {
 
       <Tab.Screen
         name="Home"
-        component={SearchBar}
+        key="Home_key"
+        component={Home}
         options={{
           tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => {
@@ -92,14 +95,6 @@ export default function App() {
       />}
 
     </Tab.Navigator>
-  );
-}
-
-function HomeScreen() {
-  return (
-    <View style={styles.container}>
-      <Text variant="headlineMedium">Home!</Text>
-    </View>
   );
 }
 
