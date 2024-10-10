@@ -6,7 +6,7 @@ import { Text, BottomNavigation } from 'react-native-paper';
 import FA5 from 'react-native-vector-icons/FontAwesome5';
 import FA6 from 'react-native-vector-icons/FontAwesome6';
 import Home from './Pages/Home';
-
+import SearchBar from './Components/SearchBar';
 
 export default function App() {
   const Tab = createBottomTabNavigator();
