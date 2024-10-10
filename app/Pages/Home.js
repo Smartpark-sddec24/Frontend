@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import MapView from 'react-native-maps';
-import { StyleSheet, View, Text } from 'react-native';
+import { StyleSheet, View } from 'react-native';
 import * as Location from 'expo-location';
 import { ActivityIndicator } from 'react-native-paper';
 import SearchBar from '../Components/SearchBar';
@@ -85,7 +85,6 @@ const styles = StyleSheet.create({
     alignContent: 'center',
     position: 'absolute',
     width: '95%',
-    // backgroundColor: 'red',
     zIndex: 1
   },
 
