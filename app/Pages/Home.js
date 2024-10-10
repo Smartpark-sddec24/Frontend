@@ -4,6 +4,8 @@ import { StyleSheet, View, Text } from 'react-native';
 import * as Location from 'expo-location';
 import { ActivityIndicator } from 'react-native-paper';
 
+
+
 export default function Home() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);

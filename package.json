@@ -9,6 +9,8 @@
     "web": "expo start --web"
   },
   "dependencies": {
+    "@stripe/stripe-js": "^4.6.0",
+    "@stripe/stripe-react-native": "^0.38.6",
     "expo": "51.0.35",
     "expo-constants": "~16.0.2",
     "expo-linking": "~6.3.1",
