@@ -1,21 +1,17 @@
 import { Text, View } from "react-native"
 import {loadStripe} from '@stripe/stripe-js';
 import { StripeProvider } from '@stripe/stripe-react-native';
+import React from 'react';
+import Stripe from '../Components/Stripe';
 
-const App = () => (
-    <StripeProvider publishableKey="YOUR_PUBLISHABLE_KEY">
-        {/* Your app components */}
+const Payment = () => {
+  return (
+    <StripeProvider
+      publishableKey="pk_test_51Q8RaWRuVD9MUnlbSNJuKodjS0Pc7LkGTZE4UziRlzXoAGnRtrZU0ijWSraxAejkvzNalYcdu8KJVAIJbZtmbz0D00iASGsqE3" // Replace with your actual publishable key
+    >
+      <Stripe/>
     </StripeProvider>
-);
+  );
+};
 
-
-
-
-export default function Payment() {
-    return (
-        <View>
-            <Text>This is the payment page</Text>
-        </View>
-    );
-}
-
+export default Payment;
