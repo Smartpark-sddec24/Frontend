@@ -1,6 +1,7 @@
 import { useStripe } from "@stripe/stripe-react-native";
 import { useState, useEffect} from "react";
-import { View, Button } from "react-native";
+import { View, Button, Text, TouchableOpacity, StyleSheet} from "react-native";
+
 
 export default function CheckoutScreen() {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
@@ -61,16 +62,49 @@ export default function CheckoutScreen() {
     }
   }
 
-  return (
-    <View>
-      <Button
-        variant="primary"
-        disabled={!loading}
-        title="Checkout"
-        onPress={didTapCheckoutButton}
-      />
-    </View>
-  );
+//   return (
+//     <View>
+//       <Button
+//         variant="primary"
+//         disabled={!loading}
+//         title="Checkout"
+//         onPress={didTapCheckoutButton}
+//       />
+//     </View>
+//   );
+// }
+return (
+  <View style={styles.container}>
+    <TouchableOpacity
+      style={[styles.button, { opacity: loading ? 1 : 0.5 }]}
+      disabled={!loading}
+      onPress={didTapCheckoutButton}
+    >
+      <Text style={styles.buttonText}>Checkout</Text>
+    </TouchableOpacity>
+  </View>
+);
 }
+
+const styles = StyleSheet.create({
+container: {
+  flex: 1,
+  justifyContent: 'center',
+  alignItems: 'center',
+  padding: 20,
+},
+button: {
+  backgroundColor: '#E6E6FA', // Light purple color
+  padding: 20, // Increase padding for a larger button
+  borderRadius: 10, // Rounded corners
+  width: '100%', // Full width
+  alignItems: 'center', // Center text horizontally
+  justifyContent: 'center', // Center text vertically
+},
+buttonText: {
+  fontSize: 18, // Larger font size
+  color: '#000', // Text color
+},
+});
  
   
