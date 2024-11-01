@@ -1,69 +1,9 @@
-// import * as React from 'react';
-// import { TextInput } from 'react-native-paper';
-// import { View, Text, StyleSheet } from 'react-native';
-
-// const SpotNumber = () => {
-//     const [text, setText] = React.useState("");
-//   return (
-//     <View style={styles.container}>
-//       <View style={styles.Box}>
-//       <Text variant="Spot Number">Spot Number</Text>
-//       <TextInput
-//        style={styles.input}
-//         label="Spot #"
-//         value={text}
-//         onChangeText={text => setText(text)}
-//       />
-//       </View>
-//       <View style={styles.Box}>
-//       <Text variant="Spot Number">Headline Small</Text>
-//       <TextInput
-//        style={styles.input}
-//         label="Spot #"
-//         value={text}
-//         onChangeText={text => setText(text)}
-//       />
-//       </View>
-//     </View>
-//   );
-// };
-
-// const styles = StyleSheet.create({
-//   container: {
-//     flex: 1,
-//     justifyContent: 'center',
-//     alignItems: 'center',
-//     position: 'relative',
-//     mode: 'outlined',
-//     inputMode: 'numeric',
-//   },
-//   Box: {
-//     position: 'relative',
-//     top: -180, // Change this value to move vertically
-//     left: 0, // Change this value to move horizontally
-//     //backgroundColor: 'lightblue',
-//     padding: 10,
-//     borderRadius: 15,
-//     inputMode: 'numeric',
-//   },
-//   input: {
-//     height: 60, // Increase height for a longer input
-//     width: 310, // Increase width for a wider input
-//     borderWidth: 2,
-//     borderColor: 'gray',
-//     //borderRadius: 20, // Optional: Add rounded corners to the TextInput
-//     paddingHorizontal: 10, // Padding inside the TextInput
-// }
-// }
-// );
-
-// export default SpotNumber;
-
 
 import * as React from 'react';
 import { TextInput } from 'react-native-paper';
 import { View, Text, StyleSheet } from 'react-native';
-
+import CheckoutScreen
+ from './CheckoutScreen';
 const SpotNumber = () => {
     const [spotNumber, setSpotNumber] = React.useState("");
     const [fullName, setFullName] = React.useState("");
@@ -74,6 +14,7 @@ const SpotNumber = () => {
 
     return (
         <View style={styles.container}>
+           <Text style={styles.header}>Payment</Text>
             <View style={styles.longBox}>
                 <Text>Spot Number</Text>
                 <TextInput
@@ -107,7 +48,7 @@ const SpotNumber = () => {
                 <Text>Full Name</Text>
                 <TextInput
                     style={styles.longInput}
-                    label=""
+                    label="Full Name"
                     value={fullName}
                     onChangeText={setFullName}
                 />
@@ -139,7 +80,13 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         justifyContent: 'flex-start',
         alignItems: 'center',
-        padding: 20,
+        paddingHorizontal: 20,
+    },
+    header: {
+        fontSize: 24, // Adjust size for the header
+        fontWeight: 'bold', // Bold for emphasis
+        marginBottom: 10, // Spacing below the headerm
+        
     },
     longBox: {
         width: '100%',
@@ -150,7 +97,6 @@ const styles = StyleSheet.create({
         width: '100%',
         borderWidth: 2,
         borderColor: 'gray',
-        //borderRadius: 25, // Full radius for oval effect
         paddingHorizontal: 10,
     },
     row: {
@@ -166,10 +112,8 @@ const styles = StyleSheet.create({
         height: 50, // Adjusted height
         borderWidth: 2,
         borderColor: 'gray',
-       // borderRadius: 25, // Full radius for oval effect
         paddingHorizontal: 10,
     },
 });
 
 export default SpotNumber;
-
