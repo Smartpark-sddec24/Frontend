@@ -76,12 +76,16 @@ export default function CheckoutScreen() {
 return (
   <View style={styles.container}>
     <TouchableOpacity
-      style={[styles.button, { opacity: loading ? 1 : 0.5 }]}
+      style={[styles.button]}
       disabled={!loading}
       onPress={didTapCheckoutButton}
+      
+      //title="Checkout"
+      mode="contained"
     >
       <Text style={styles.buttonText}>Checkout</Text>
     </TouchableOpacity>
+ 
   </View>
 );
 }
@@ -94,8 +98,8 @@ container: {
   padding: 20,
 },
 button: {
-  backgroundColor: '#E6E6FA', // Light purple color
-  padding: 20, // Increase padding for a larger button
+  backgroundColor: '#AAEFFF' , // Light purple color
+  padding: 20, // Increae padding for a larger button
   borderRadius: 10, // Rounded corners
   width: '100%', // Full width
   alignItems: 'center', // Center text horizontally
