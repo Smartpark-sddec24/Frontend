@@ -5,6 +5,8 @@ import * as Location from 'expo-location';
 import { ActivityIndicator } from 'react-native-paper';
 import SearchBar from '../Components/SearchBar';
 
+
+
 export default function Home() {
   const [location, setLocation] = useState(null);
   const [errorMsg, setErrorMsg] = useState(null);

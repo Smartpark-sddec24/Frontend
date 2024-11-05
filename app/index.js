@@ -6,7 +6,9 @@ import { Text, BottomNavigation } from 'react-native-paper';
 import FA5 from 'react-native-vector-icons/FontAwesome5';
 import FA6 from 'react-native-vector-icons/FontAwesome6';
 import Home from './Pages/Home';
-import SearchBar from './Components/SearchBar';
+import Payment from './Pages/Payment';
+
+
 
 export default function App() {
   const Tab = createBottomTabNavigator();
@@ -71,9 +73,8 @@ export default function App() {
         }}
       />}
 
-      <Tab.Screen
+      {<Tab.Screen
         name="Home"
-        key="Home_key"
         component={Home}
         options={{
           tabBarLabel: 'Home',
@@ -81,11 +82,11 @@ export default function App() {
             return <FA6 name="map-location-dot" size={size} color={color} />;
           },
         }}
-      />
+      />}
 
       {<Tab.Screen
         name="Reserve"
-        component={SettingsScreen}
+        component={Payment}
         options={{
           tabBarLabel: 'Reserve',
           tabBarIcon: ({ color, size }) => {
