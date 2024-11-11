@@ -12,6 +12,7 @@
     "@react-native-picker/picker": "^2.9.0",
     "@stripe/stripe-js": "^4.8.0",
     "@stripe/stripe-react-native": "^0.38.6",
+    "axios": "^1.7.7",
     "expo": "51.0.35",
     "expo-constants": "~16.0.2",
     "expo-linking": "~6.3.1",
