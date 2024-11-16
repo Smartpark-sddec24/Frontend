@@ -1,5 +1,5 @@
 
-import React, { useEffect, useState, useCallback } from 'react';
+import React, { useEffect, useState, useCallback} from 'react';
 import MapView, { Marker, Callout } from 'react-native-maps';
 import { StyleSheet, View, TouchableOpacity, Text } from 'react-native';
 import * as Location from 'expo-location';
@@ -9,7 +9,7 @@ import axios from 'axios';
 
 export default function Home({ navigation }) {
   const [location, setLocation] = useState(null);
-  const [locations, selLocations] = useState(null);
+  const [locations, setLocations] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
   const [region, setRegion] = useState({
     latitude: 42.02962944614904,  // Coordinates for Ames, Iowa
@@ -35,13 +35,15 @@ export default function Home({ navigation }) {
       }
       let location = await Location.getCurrentPositionAsync();
       setLocation(location);
+      await axios.get("https://e264b7cc-67fe-4b7d-87d2-a509fc0eebcb.mock.pstmn.io/getLocations")
+      .then(res => {
+        let recieved_locations = res.data;
+        setLocations(recieved_locations);
+      })
+      .catch((error) => {
+        console.log(error)
+      })
     })();
-    axios.get("https://e264b7cc-67fe-4b7d-87d2-a509fc0eebcb.mock.pstmn.io/getLocations")
-    .then(res => {
-      let locations = res.data;
-      selLocations(locations);
-      console.log(locations)
-    })
   }, []);
 
   // Use useCallback to avoid unnecessary re-renders when region changes
@@ -56,6 +58,23 @@ export default function Home({ navigation }) {
 
   if (errorMsg) {
     console.log(errorMsg);
+  }
+
+  let markers = null;
+  if(locations){
+    markers = locations.map(loc => 
+      <Marker coordinate={{latitude: loc.latitude, longitude:loc.longitude}}>
+          <Callout>
+            <View style={styles.callout}>
+              <Text style={styles.lotName}>{parkingLocation.lotName}</Text>
+              <Text>{`Available Spots: ${parkingLocation.availableSpots}`}</Text>
+              <TouchableOpacity style={styles.reserveButton} onPress={handleReservePress}>
+                <Text style={styles.reserveButtonText}>Reserve</Text>
+              </TouchableOpacity>
+            </View>
+          </Callout>
+        </Marker>
+    )
   }
 
   if (location) {
@@ -76,19 +95,8 @@ export default function Home({ navigation }) {
           zoomControlEnabled={true} // Enables zoom controls if needed, but can be omitted for performance
         >
           {/* Marker for Ames, Iowa parking location */}
-          <Marker coordinate={parkingLocation}>
-            <Callout>
-              <View style={styles.callout}>
-                <Text style={styles.lotName}>{parkingLocation.lotName}</Text>
-                <Text>{`Available Spots: ${parkingLocation.availableSpots}`}</Text>
-                <TouchableOpacity style={styles.reserveButton} onPress={handleReservePress}>
-                  <Text style={styles.reserveButtonText}>Reserve</Text>
-                </TouchableOpacity>
-              </View>
-            </Callout>
-          </Marker>
+          {markers}
         </MapView>
-
         <View style={styles.searchbarView}>
           <View style={styles.searchbar}>
             <SearchBar />
