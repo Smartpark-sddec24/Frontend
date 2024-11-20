@@ -35,14 +35,15 @@ export default function Home({ navigation }) {
       }
       let location = await Location.getCurrentPositionAsync();
       setUserLocation(location);
-      await axios.get("http://" + process.env.EXPO_PUBLIC_SERVER_ADDRESS +"/getLocations")
-      .then((res) => {
-        setLocations(res.data)
-        console.log(res.data[0])
-      })
+      await axios.get(process.env.EXPO_PUBLIC_SERVER_ADDRESS +"/getLocations")
+      .then((res) => {setLocations(res.data)})
       .catch((error) => {
         if(error.request){
           console.log("request error ", error.request)
+        } else if (error.response){
+          console.log("response error: ", error.response)
+        } else {
+          console.log("error: ", error)
         }
       })
     })();
@@ -85,6 +86,7 @@ export default function Home({ navigation }) {
                 <Callout>
                   <View style={styles.callout}>
                     <Text style={styles.lotName}>{loc.location_name}</Text>
+                    {/* TODO do avaliable spots request when a marker is pressed */}
                     <Text>{`Available Spots: ${parkingLocation.availableSpots}`}</Text>
                     <TouchableOpacity style={styles.reserveButton} onPress={handleReservePress}>
                       <Text style={styles.reserveButtonText}>Reserve</Text>
