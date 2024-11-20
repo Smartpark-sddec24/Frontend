@@ -8,7 +8,7 @@ import SearchBar from '../Components/SearchBar';
 import axios from 'axios';
 
 export default function Home({ navigation }) {
-  const [location, setLocation] = useState(null);
+  const [userLocation, setUserLocation] = useState(null);
   const [locations, setLocations] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
   const [region, setRegion] = useState({
@@ -34,14 +34,16 @@ export default function Home({ navigation }) {
         return;
       }
       let location = await Location.getCurrentPositionAsync();
-      setLocation(location);
-      await axios.get("https://e264b7cc-67fe-4b7d-87d2-a509fc0eebcb.mock.pstmn.io/getLocations")
-      .then(res => {
-        let recieved_locations = res.data;
-        setLocations(recieved_locations);
+      setUserLocation(location);
+      await axios.get("http://" + process.env.EXPO_PUBLIC_SERVER_ADDRESS +"/getLocations")
+      .then((res) => {
+        setLocations(res.data)
+        console.log(res.data[0])
       })
       .catch((error) => {
-        console.log(error)
+        if(error.request){
+          console.log("request error ", error.request)
+        }
       })
     })();
   }, []);
@@ -58,26 +60,9 @@ export default function Home({ navigation }) {
 
   if (errorMsg) {
     console.log(errorMsg);
-  }
+  } 
 
-  let markers = null;
-  if(locations){
-    markers = locations.map(loc => 
-      <Marker coordinate={{latitude: loc.latitude, longitude:loc.longitude}}>
-          <Callout>
-            <View style={styles.callout}>
-              <Text style={styles.lotName}>{parkingLocation.lotName}</Text>
-              <Text>{`Available Spots: ${parkingLocation.availableSpots}`}</Text>
-              <TouchableOpacity style={styles.reserveButton} onPress={handleReservePress}>
-                <Text style={styles.reserveButtonText}>Reserve</Text>
-              </TouchableOpacity>
-            </View>
-          </Callout>
-        </Marker>
-    )
-  }
-
-  if (location) {
+  if (userLocation && locations) {
     return (
       <View style={styles.container}>
         <MapView
@@ -95,7 +80,19 @@ export default function Home({ navigation }) {
           zoomControlEnabled={true} // Enables zoom controls if needed, but can be omitted for performance
         >
           {/* Marker for Ames, Iowa parking location */}
-          {markers}
+          {locations.map(loc => 
+            <Marker key={`${loc.location_id}`} coordinate={loc}>
+                <Callout>
+                  <View style={styles.callout}>
+                    <Text style={styles.lotName}>{loc.location_name}</Text>
+                    <Text>{`Available Spots: ${parkingLocation.availableSpots}`}</Text>
+                    <TouchableOpacity style={styles.reserveButton} onPress={handleReservePress}>
+                      <Text style={styles.reserveButtonText}>Reserve</Text>
+                    </TouchableOpacity>
+                  </View>
+                </Callout>
+              </Marker>
+            )}
         </MapView>
         <View style={styles.searchbarView}>
           <View style={styles.searchbar}>
