@@ -7,8 +7,7 @@ import FA5 from 'react-native-vector-icons/FontAwesome5';
 import FA6 from 'react-native-vector-icons/FontAwesome6';
 import Home from './Pages/Home';
 import Payment from './Pages/Payment';
-
-
+import axios from 'axios';
 
 export default function App() {
   const Tab = createBottomTabNavigator();
@@ -44,7 +43,6 @@ export default function App() {
             if (options.tabBarIcon) {
               return options.tabBarIcon({ focused, color, size: 24 });
             }
-
             return null;
           }}
           getLabelText={({ route }) => {
