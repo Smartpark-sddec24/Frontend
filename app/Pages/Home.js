@@ -11,12 +11,14 @@ export default function Home({ navigation }) {
   const [userLocation, setUserLocation] = useState(null);
   const [locations, setLocations] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
+  const [availableSpots, setAvailableSpots] = useState({});
   const [region, setRegion] = useState({
     latitude: 42.02962944614904,  // Coordinates for Ames, Iowa
     longitude: -93.65165725516594,
     latitudeDelta: 0.05,  // Optimized zoom
     longitudeDelta: 0.05, // Optimized zoom
   });
+  
 
   // Updated coordinates for Ames, Iowa
   const parkingLocation = {
@@ -54,6 +56,36 @@ export default function Home({ navigation }) {
     setRegion(newRegion);
   }, []);
 
+
+
+
+
+  const handleMarkerPress = async (marker_id) => {
+    // Handle the marker press event here
+    console.log("Handling: ", marker_id)
+    await axios.get(process.env.EXPO_PUBLIC_SERVER_ADDRESS +"/getAvailableSpots", {
+        params: {
+          location_id: marker_id
+        }
+      }
+    )
+    .then((res) => {setAvailableSpots(res.data)})
+    .then(console.log(availableSpots))
+    .catch((error) => {
+      if(error.request){
+        console.log("request error ", error.request)
+      } else if (error.response){
+        console.log("response error: ", error.response)
+      } else {
+        console.log("error: ", error)
+      }
+  })
+}
+   // console.log("Marker pressed:", marker);
+
+
+
+
   const handleReservePress = () => {
     // Navigate to the reservation page
     navigation.navigate('Reserve');  // Ensure 'Reserve' is the correct name of your screen
@@ -82,16 +114,21 @@ export default function Home({ navigation }) {
         >
           {/* Marker for Ames, Iowa parking location */}
           {locations.map(loc => 
-            <Marker key={`${loc.location_id}`} coordinate={loc}>
-                <Callout>
-                  <View style={styles.callout}>
+            <Marker key={loc.location_id} coordinate={loc} 
+            onPress={() => handleMarkerPress(loc.location_id)}>
+                <Callout >
+                  <View style={styles.callout}> 
                     <Text style={styles.lotName}>{loc.location_name}</Text>
+                    
                     {/* TODO do avaliable spots request when a marker is pressed */}
-                    <Text>{`Available Spots: ${parkingLocation.availableSpots}`}</Text>
+                    
+                    <Text>{`Available Spots: ${availableSpots.availableSpot}/${availableSpots.totalSpot}`}</Text>
                     <TouchableOpacity style={styles.reserveButton} onPress={handleReservePress}>
                       <Text style={styles.reserveButtonText}>Reserve</Text>
                     </TouchableOpacity>
                   </View>
+                  
+                  
                 </Callout>
               </Marker>
             )}
@@ -138,9 +175,12 @@ const styles = StyleSheet.create({
   },
 
   callout: {
-    width: 150,
+    width: 200,
     padding: 10,
+    //height: 200,
     alignItems: 'center',
+    zIndex: 1,
+
   },
 
   lotName: {
