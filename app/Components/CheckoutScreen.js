@@ -1,11 +1,17 @@
 import { useStripe } from "@stripe/stripe-react-native";
 import { useState, useEffect} from "react";
 import { View, Button, Text, TouchableOpacity, StyleSheet} from "react-native";
+import axios from 'axios';
 
-
-export default function CheckoutScreen() {
+ const CheckoutScreen = (props) => {
   const { initPaymentSheet, presentPaymentSheet } = useStripe();
   const [loading, setLoading] = useState(false);
+  const [reserveResult, setReserveResult] = useState(props.spot);
+
+  useEffect(() => {
+    initializePaymentSheet()
+      .then(setLoading(true));
+  }, []);
 
   const initializePaymentSheet = async () => {
     const { error } = await initPaymentSheet({
@@ -24,10 +30,7 @@ export default function CheckoutScreen() {
     }
   };
 
-  useEffect(() => {
-    initializePaymentSheet()
-      .then(setLoading(true));
-  }, []);
+  
 
   const confirmHandler = async (paymentMethod, shouldSavePaymentMethod, intentCreationCallback) => {
     const confirmHandler = async (paymentMethod, shouldSavePaymentMethod, intentCreationCallback) => {
@@ -48,19 +51,40 @@ export default function CheckoutScreen() {
   }
 
   const didTapCheckoutButton = async () => {
-    const { error } = await presentPaymentSheet();
-
-    if (error) {
-      if (error.code === PaymentSheetError.Canceled) {
-        // Customer canceled - you should probably do nothing
-      } else {
-        // PaymentSheet encountered an unrecoverable error. You can display the error to the user, log it, etc.
+    console.log("Checkin props: ", props.spot)
+    await axios.post(process.env.EXPO_PUBLIC_SERVER_ADDRESS + "/reserve", {
+      params: {
+        spot_id: props.spot
       }
-      console.log(error)
-    } else {
-      // Payment completed - show a confirmation screen.
-    }
+    })
+     .then((res) => {
+      console.log("res: ",res.data)
+      // setReserveResult(res.data)
+     })
+     .catch((error) => {
+      if (error.request) {
+        console.log("request error ", error.request)
+      } else if (error.response) {
+        console.log("response error: ", error.response)
+      } else {
+        console.log("error: ", error)
+      }
+    })
+
+    // const { error } = await presentPaymentSheet();
+
+    // if (error) {
+    //   if (error.code === PaymentSheetError.Canceled) {
+    //     // Customer canceled - you should probably do nothing
+    //   } else {
+    //     // PaymentSheet encountered an unrecoverable error. You can display the error to the user, log it, etc.
+    //   }
+    //   console.log(error)
+    // } else {
+    //   // Payment completed - show a confirmation screen.
+    // }
   }
+
 
 //   return (
 //     <View>
@@ -111,4 +135,4 @@ buttonText: {
 },
 });
  
-  
+export default CheckoutScreen
