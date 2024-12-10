@@ -71,18 +71,18 @@ import axios from 'axios';
       }
     })
 
-    // const { error } = await presentPaymentSheet();
+    const { error } = await presentPaymentSheet();
 
-    // if (error) {
-    //   if (error.code === PaymentSheetError.Canceled) {
-    //     // Customer canceled - you should probably do nothing
-    //   } else {
-    //     // PaymentSheet encountered an unrecoverable error. You can display the error to the user, log it, etc.
-    //   }
-    //   console.log(error)
-    // } else {
-    //   // Payment completed - show a confirmation screen.
-    // }
+    if (error) {
+      if (error.code === PaymentSheetError.Canceled) {
+        // Customer canceled - you should probably do nothing
+      } else {
+        // PaymentSheet encountered an unrecoverable error. You can display the error to the user, log it, etc.
+      }
+      console.log(error)
+    } else {
+      // Payment completed - show a confirmation screen.
+    }
   }
 
 
