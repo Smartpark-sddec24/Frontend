@@ -85,6 +85,7 @@ export default function App() {
       {<Tab.Screen
         name="Reserve"
         component={Payment}
+        initialParams={{spot_id: 0}}
         options={{
           tabBarLabel: 'Reserve',
           tabBarIcon: ({ color, size }) => {

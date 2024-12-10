@@ -12,13 +12,13 @@ export default function Home({ navigation }) {
   const [locations, setLocations] = useState([]);
   const [errorMsg, setErrorMsg] = useState(null);
   const [availableSpots, setAvailableSpots] = useState({});
+  const [OneOpen, setOneOpen] = useState({});
   const [region, setRegion] = useState({
     latitude: 42.02962944614904,  // Coordinates for Ames, Iowa
     longitude: -93.65165725516594,
     latitudeDelta: 0.05,  // Optimized zoom
     longitudeDelta: 0.05, // Optimized zoom
   });
-  
 
   // Updated coordinates for Ames, Iowa
   const parkingLocation = {
@@ -37,17 +37,17 @@ export default function Home({ navigation }) {
       }
       let location = await Location.getCurrentPositionAsync();
       setUserLocation(location);
-      await axios.get(process.env.EXPO_PUBLIC_SERVER_ADDRESS +"/getLocations")
-      .then((res) => {setLocations(res.data)})
-      .catch((error) => {
-        if(error.request){
-          console.log("request error ", error.request)
-        } else if (error.response){
-          console.log("response error: ", error.response)
-        } else {
-          console.log("error: ", error)
-        }
-      })
+      await axios.get(process.env.EXPO_PUBLIC_SERVER_ADDRESS + "/getLocations")
+        .then((res) => { setLocations(res.data) })
+        .catch((error) => {
+          if (error.request) {
+            console.log("request error ", error.request)
+          } else if (error.response) {
+            console.log("response error: ", error.response)
+          } else {
+            console.log("error: ", error)
+          }
+        })
     })();
   }, []);
 
@@ -56,44 +56,60 @@ export default function Home({ navigation }) {
     setRegion(newRegion);
   }, []);
 
-
-
-
-
   const handleMarkerPress = async (marker_id) => {
     // Handle the marker press event here
     console.log("Handling: ", marker_id)
-    await axios.get(process.env.EXPO_PUBLIC_SERVER_ADDRESS +"/getAvailableSpots", {
-        params: {
-          location_id: marker_id
-        }
+    await axios.get(process.env.EXPO_PUBLIC_SERVER_ADDRESS + "/getAvailableSpots", {
+      params: {
+        location_id: marker_id
       }
-    )
-    .then((res) => {setAvailableSpots(res.data)})
-    .then(console.log(availableSpots))
+    })
+      .then((res) => { setAvailableSpots(res.data) })
+      .then(console.log(availableSpots))
+      .catch((error) => {
+        if (error.request) {
+          console.log("request error ", error.request)
+        } else if (error.response) {
+          console.log("response error: ", error.response)
+        } else {
+          console.log("error: ", error)
+        }
+      })
+  }
+
+
+
+
+  const handleReservePress = async (marker_id) => {
+    //Navigate to the reservation page
+
+    await axios.get(process.env.EXPO_PUBLIC_SERVER_ADDRESS + "/getOneOpen", {
+      params: {
+        location_id: marker_id
+      }
+    })
+    .then((res) => { setOneOpen(res.data) })
+    .then(() => {
+      console.log("Home Out: ", OneOpen['spot_id'])
+      navigation.navigate('Reserve', {
+        spot_id: OneOpen['spot_id']
+      });  // Ensure 'Reserve' is the correct name of your screen
+    })
     .catch((error) => {
-      if(error.request){
+      if (error.request) {
         console.log("request error ", error.request)
-      } else if (error.response){
+      } else if (error.response) {
         console.log("response error: ", error.response)
       } else {
         console.log("error: ", error)
       }
-  })
-}
-   // console.log("Marker pressed:", marker);
-
-
-
-
-  const handleReservePress = () => {
-    // Navigate to the reservation page
-    navigation.navigate('Reserve');  // Ensure 'Reserve' is the correct name of your screen
+    })
+    
   };
 
   if (errorMsg) {
     console.log(errorMsg);
-  } 
+  }
 
   if (userLocation && locations) {
     return (
@@ -113,25 +129,25 @@ export default function Home({ navigation }) {
           zoomControlEnabled={true} // Enables zoom controls if needed, but can be omitted for performance
         >
           {/* Marker for Ames, Iowa parking location */}
-          {locations.map(loc => 
-            <Marker key={loc.location_id} coordinate={loc} 
-            onPress={() => handleMarkerPress(loc.location_id)}>
-                <Callout >
-                  <View style={styles.callout}> 
-                    <Text style={styles.lotName}>{loc.location_name}</Text>
-                    
-                    {/* TODO do avaliable spots request when a marker is pressed */}
-                    
-                    <Text>{`Available Spots: ${availableSpots.availableSpot}/${availableSpots.totalSpot}`}</Text>
+          {locations.map(loc =>
+            <Marker key={loc.location_id} coordinate={loc}
+              onPress={() => handleMarkerPress(loc.location_id)}>
+                <Callout onPress={() => handleReservePress(loc.location_id)}>
+                <View style={styles.callout}>
+                  <Text style={styles.lotName}>{loc.location_name}</Text>
+
+                  {/* TODO do avaliable spots request when a marker is pressed */}
+
+                  <Text>{`Available Spots: ${availableSpots.availableSpot}/${availableSpots.totalSpot}`}</Text>
                     <TouchableOpacity style={styles.reserveButton} onPress={handleReservePress}>
-                      <Text style={styles.reserveButtonText}>Reserve</Text>
-                    </TouchableOpacity>
-                  </View>
-                  
-                  
-                </Callout>
-              </Marker>
-            )}
+                    <Text style={styles.reserveButtonText}>Reserve</Text>
+                  </TouchableOpacity>
+                </View>
+
+
+              </Callout>
+            </Marker>
+          )}
         </MapView>
         <View style={styles.searchbarView}>
           <View style={styles.searchbar}>
@@ -179,8 +195,6 @@ const styles = StyleSheet.create({
     padding: 10,
     //height: 200,
     alignItems: 'center',
-    zIndex: 1,
-
   },
 
   lotName: {
@@ -195,6 +209,7 @@ const styles = StyleSheet.create({
     backgroundColor: '#4CAF50',
     borderRadius: 5,
     alignItems: 'center',
+    zIndex: 3,
   },
 
   reserveButtonText: {
@@ -202,3 +217,5 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
   },
 });
+
+

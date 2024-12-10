@@ -98,7 +98,7 @@ container: {
   padding: 20,
 },
 button: {
-  backgroundColor: '#AAEFFF' , // Light purple color
+  backgroundColor: '#4CAF50' , // Light purple color
   padding: 20, // Increae padding for a larger button
   borderRadius: 10, // Rounded corners
   width: '100%', // Full width
@@ -107,7 +107,7 @@ button: {
 },
 buttonText: {
   fontSize: 18, // Larger font size
-  color: '#000', // Text color
+  color: '#FFF', // Text color
 },
 });
  
